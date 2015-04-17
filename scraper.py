@@ -28,7 +28,7 @@ links = soup.findAll('a', href=True)
 for link in links:
 	url = link['href']
 	if '/about-the-city/how-we-make-decisions/budgets-and-spending/Documents/csv/' in url:
-	  url = 'http://www.cityoflondon.gov.uk'+url
+		url = 'http://www.cityoflondon.gov.uk'+url
 		title = link.contents[0]
 		# create the right strings for the new filename
 		csvYr = title.split(' ')[1]
