@@ -84,7 +84,7 @@ def convert_mth_strings ( mth_string ):
 #### VARIABLES 1.0
 
 entity_id = "E5010_CCOTCOL_gov"
-url = "http://www.cityoflondon.gov.uk/about-the-city/how-we-make-decisions/budgets-and-spending/Pages/expenditure-on-local-authority-activities.aspx"
+url = "https://www.cityoflondon.gov.uk/about-the-city/budgets-and-spending/Pages/expenditure.aspx"
 errors = 0
 data = []
 
@@ -96,17 +96,17 @@ soup = BeautifulSoup(html, 'lxml')
 
 #### SCRAPE DATA
 
-links = soup.findAll('a', href=True)
-
-for link in links:
-    url = link['href']
-    if '/about-the-city/how-we-make-decisions/budgets-and-spending/Documents/csv/' in url:
-        url = 'http://www.cityoflondon.gov.uk'+url
-        title = link.contents[0]
-        csvYr = title.split(' ')[1]
-        csvMth = title.split(' ')[0][:3]
-        csvMth = convert_mth_strings(csvMth.upper())
-        data.append([csvYr, csvMth, url])
+blocks = soup.find_all('div', 'concertina-content')
+for block in blocks:
+    links = block.find_all('a')
+    for link in links:
+        if '.csv' in link['href']:
+            url = 'https://www.cityoflondon.gov.uk'+link['href']
+            title = link.text.strip()
+            csvYr = title.split()[1]
+            csvMth = title.split()[0][:3]
+            csvMth = convert_mth_strings(csvMth.upper())
+            data.append([csvYr, csvMth, url])
 
 #### STORE DATA 1.0
 
